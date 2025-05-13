@@ -31,14 +31,29 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region:            us-east-1    # your bucket's region
 
-      # 4️⃣ Sync files up to S3 (deletes any removed files)
+      # 4️⃣ List S3 buckets (for debugging)
+      - name: List S3 buckets
+        run: |
+          echo "Listing available S3 buckets..."
+          aws s3 ls || echo "Failed to list buckets - check AWS credentials"
+
+      # 5️⃣ Sync files up to S3
       - name: Sync to S3
         run: |
-          aws s3 sync ./balance_landing_page s3://withbalancehealth.com --delete
+          echo "Attempting to sync to S3 bucket..."
+          aws s3 sync ./balance_landing_page s3://withbalancehealth.com --delete || {
+            echo "Failed to sync to S3"
+            exit 1
+          }
 
-      # 5️⃣ Invalidate CloudFront so the CDN picks up changes
+      # 6️⃣ Invalidate CloudFront
       - name: Invalidate CloudFront cache
+        if: success()
         run: |
+          echo "Invalidating CloudFront cache..."
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
-            --paths "/*"
+            --paths "/*" || {
+              echo "Failed to invalidate CloudFront cache"
+              exit 1
+            }
