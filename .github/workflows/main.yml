@@ -1,0 +1,44 @@
+# .github/workflows/deploy.yml
+
+name: 📦 Deploy site to S3 & CloudFront
+
+on:
+  push:
+    branches: [ main ]    # ← or your default branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Get the code
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # 2️⃣ (Optional) Build step
+      # Uncomment if you have a build step (Next.js, Astro, etc.)
+      # - name: Install & build
+      #   run: |
+      #     npm ci
+      #     npm run build
+      #   # If your build output lands in `out/`, change `./dist` below to `./out`
+
+      # 3️⃣ Configure AWS credentials from your repository secrets
+      - name: Configure AWS creds
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region:            us-east-1    # your bucket's region
+
+      # 4️⃣ Sync files up to S3 (deletes any removed files)
+      - name: Sync to S3
+        run: |
+          aws s3 sync ./balance_landing_page s3://withbalancehealth.com --delete
+
+      # 5️⃣ Invalidate CloudFront so the CDN picks up changes
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
