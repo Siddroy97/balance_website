@@ -1145,4 +1145,53 @@ body.menu-open {
   }
 }
 
+/* ==== MOBILE HERO FIX ==== */
+@media (max-width: 767px) {
+  .hero-wrapper {
+    overflow: hidden;    /* hide inner scroll bar */
+  }
+  .hero-mockup {
+    display: block;
+    width: 100%;         /* full container width */
+    height: auto;        /* maintain aspect ratio */
+    z-index: 1;          /* above tint layer */
+  }
+  .hero::before {
+    z-index: 0;          /* send gradient overlay behind mock-up */
+  }
+  .hero-mockup-container {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 2px 16px 0 rgba(54,31,147,0.10);
+    padding: 0.5rem;
+    margin: 0 auto;
+    max-width: 98vw;
+    border: 1px solid #eee;
+  }
+  .hero-mockup-container img,
+  .hero-mockup-container .block3-wireframe-img {
+    border-radius: 14px;
+    width: 100%;
+    height: auto;
+    display: block;
+    background: #fff;
+  }
+}
+
+/* ==== MOBILE FLOW-CHART ARROW FIX ==== */
+@media (max-width: 767px) {
+  .flowchart {
+    display: flex;
+    flex-direction: column;   /* stack steps vertically */
+    align-items: center;
+  }
+  .flowchart .arrow,
+  .flowchart svg.arrow {
+    transform: rotate(90deg); /* point arrows down */
+  }
+  .flowchart .step + .step {
+    margin-top: 1rem;         /* spacing between stacked steps */
+  }
+}
+
 
