@@ -52,7 +52,7 @@ jobs:
         run: |
           echo "Invalidating CloudFront cache..."
           aws cloudfront create-invalidation \
-            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --distribution-id ERJE11J9LDERJ \
             --paths "/*" || {
               echo "Failed to invalidate CloudFront cache"
               exit 1
