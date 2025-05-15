@@ -34,4 +34,21 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   narrativeGroups.forEach(group => observer.observe(group));
+
+  // === TIMELINE STEP ANIMATION ===
+  const timelineSteps = document.querySelectorAll('.timeline-step');
+  timelineSteps.forEach(step => step.classList.add('animated'));
+  const timelineObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, idx) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, idx * 200);
+        timelineObserver.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.3
+  });
+  timelineSteps.forEach(step => timelineObserver.observe(step));
 });
