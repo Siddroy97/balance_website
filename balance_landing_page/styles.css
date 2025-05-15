@@ -476,7 +476,7 @@ header.visible {
     font-size: 1rem;
   }
 
-  .header-right {
+  .header-right nav {
     display: none;
   }
 

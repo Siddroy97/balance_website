@@ -30,7 +30,7 @@
 <body class="locked">
 
   <!-- Intro Layer (Fixed on Top) -->
-  <div id="intro" class="intro">
+  <div id="intro" class="intro" style="display:none;">
     <img src="logo.svg" alt="Balance Health logo" class="intro-logo" />
     <h1 class="intro-text">Balance Health</h1>
   </div>
@@ -42,6 +42,9 @@
     </div>
     <div class="header-center">Balance Health</div>
     <div class="header-right">
+      <nav class="hidden md:flex items-center space-x-2">
+        <a href="mission.html" class="px-4 py-2">mission</a>
+      </nav>
       <button class="mobile-menu-btn" aria-label="Toggle mobile menu">
         <span></span>
         <span></span>
@@ -51,20 +54,21 @@
   </header>
 
   <!-- Mobile Menu -->
-  <div class="mobile-menu">
+  <div class="mobile-menu" id="mobileMenu">
     <nav>
+      <a href="mission.html" class="px-4 py-2">mission</a>
     </nav>
   </div>
 
   <!-- Main Content -->
   <main id="mainContent">
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="hero">
       <h1>Revenue Engine for Small Clinics</h1>
       <p>
         Every note you speak is a claim we file. Balance handles your notes, coding, and billing — automatically.
       </p>
-      <button class="cta-button" onclick="document.getElementById('talk-tap-paid').scrollIntoView({behavior: 'smooth'});">Learn more</button>
+      <button class="cta-button" id="learnMoreBtn">Learn more</button>
     </section>
 
     <!-- Problem Section -->
@@ -167,26 +171,39 @@
       const header = document.getElementById("mainHeader");
       const body = document.body;
       const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-      const mobileMenu = document.querySelector('.mobile-menu');
+      const mobileMenu = document.getElementById('mobileMenu');
 
-      let unlocked = false;
-
-      const unlock = () => {
-        if (unlocked) return;
-        unlocked = true;
-
-        intro.classList.add("intro-hide");
+      // Only show intro if not already shown in this session
+      const introShown = sessionStorage.getItem('introShown');
+      if (!introShown) {
+        intro.style.display = '';
+        body.classList.add('locked');
+        let unlocked = false;
+        const unlock = () => {
+          if (unlocked) return;
+          unlocked = true;
+          intro.classList.add("intro-hide");
+          header.classList.add("visible");
+          setTimeout(() => {
+            intro.style.display = "none";
+            body.classList.remove("locked");
+            window.scrollTo({ top: 0, behavior: "instant" });
+          }, 1000);
+          sessionStorage.setItem('introShown', 'true');
+        };
+        window.addEventListener("wheel", unlock, { once: true });
+        window.addEventListener("keydown", (e) => {
+          if (["ArrowDown", "PageDown", " "].includes(e.key)) unlock();
+        }, { once: true });
+        window.addEventListener("touchstart", unlock, { once: true });
+      } else {
         header.classList.add("visible");
-
-        setTimeout(() => {
-          intro.style.display = "none";
-          body.classList.remove("locked");
-          window.scrollTo({ top: 0, behavior: "instant" });
-        }, 1000);
-      };
+        body.classList.remove("locked");
+      }
 
       // Mobile menu toggle
-      mobileMenuBtn.addEventListener('click', () => {
+      mobileMenuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
         mobileMenuBtn.classList.toggle('active');
         mobileMenu.classList.toggle('active');
         body.classList.toggle('menu-open');
@@ -201,12 +218,14 @@
         });
       });
 
-      // Trigger unlock on first real scroll intent
-      window.addEventListener("wheel", unlock, { once: true });
-      window.addEventListener("keydown", (e) => {
-        if (["ArrowDown", "PageDown", " "].includes(e.key)) unlock();
-      }, { once: true });
-      window.addEventListener("touchstart", unlock, { once: true });
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (mobileMenu.classList.contains('active') && !mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+          mobileMenuBtn.classList.remove('active');
+          mobileMenu.classList.remove('active');
+          body.classList.remove('menu-open');
+        }
+      });
     });
   </script>
 
@@ -238,6 +257,24 @@
       document.querySelectorAll('.narrative-block').forEach(block => {
         observer.observe(block);
       });
+    });
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const learnMoreBtn = document.getElementById('learnMoreBtn');
+      if (learnMoreBtn) {
+        learnMoreBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.getElementById('talk-tap-paid');
+          const header = document.getElementById('mainHeader');
+          const headerHeight = header ? header.offsetHeight : 80;
+          const rect = target.getBoundingClientRect();
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const top = rect.top + scrollTop - headerHeight - 12; // 12px extra for spacing
+          window.scrollTo({ top, behavior: 'smooth' });
+        });
+      }
     });
   </script>
   </body>
