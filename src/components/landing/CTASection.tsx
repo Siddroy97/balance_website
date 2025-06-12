@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -19,9 +18,6 @@ const CTASection = () => {
         <h2 className="text-4xl md:text-5xl font-plus-jakarta font-bold text-white mb-6">
           Ready to Transform Your Practice?
         </h2>
-        <p className="text-xl text-gray-300 mb-8 font-plus-jakarta leading-relaxed">
-          Join hundreds of independent clinics already saving time and increasing revenue with our integrated platform.
-        </p>
         <div className="flex justify-center">
           <Button 
             onClick={handleGetStarted}
