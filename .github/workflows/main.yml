@@ -15,15 +15,20 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2️⃣ (Optional) Build step
-      # Uncomment if you have a build step (Next.js, Astro, etc.)
-      # - name: Install & build
-      #   run: |
-      #     npm ci
-      #     npm run build
-      #   # If your build output lands in `out/`, change `./dist` below to `./out`
+      # 2️⃣ Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
 
-      # 3️⃣ Configure AWS credentials from your repository secrets
+      # 3️⃣ Install dependencies and build
+      - name: Install & build
+        run: |
+          npm ci
+          npm run build
+
+      # 4️⃣ Configure AWS credentials from your repository secrets
       - name: Configure AWS creds
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -31,22 +36,22 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region:            us-east-1    # your bucket's region
 
-      # 4️⃣ List S3 buckets (for debugging)
+      # 5️⃣ List S3 buckets (for debugging)
       - name: List S3 buckets
         run: |
           echo "Listing available S3 buckets..."
           aws s3 ls || echo "Failed to list buckets - check AWS credentials"
 
-      # 5️⃣ Sync files up to S3
+      # 6️⃣ Sync files up to S3
       - name: Sync to S3
         run: |
           echo "Attempting to sync to S3 bucket..."
-          aws s3 sync ./balance_landing_page s3://withbalancehealth.com --delete || {
+          aws s3 sync ./dist s3://withbalancehealth.com --delete || {
             echo "Failed to sync to S3"
             exit 1
           }
 
-      # 6️⃣ Invalidate CloudFront
+      # 7️⃣ Invalidate CloudFront
       - name: Invalidate CloudFront cache
         if: success()
         run: |
