@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Search, CheckCircle, Clock, User, Shield } from 'lucide-react';
 
@@ -55,9 +54,12 @@ const SolutionSlide = () => {
 
   return (
     <div className="space-y-8">
-      {/* Fixed-size Demo Container */}
-      <div className="bg-white border-2 border-gray-200 rounded-lg p-6 max-w-2xl mx-auto shadow-sm h-[580px] flex flex-col overflow-hidden">
-        <div className="flex-1 space-y-5 overflow-hidden">
+      {/* Responsive Demo Container */}
+      <div
+        className="bg-white border-2 border-gray-200 rounded-lg p-4 sm:p-6 max-w-2xl mx-auto shadow-sm flex flex-col min-h-[520px] overflow-auto md:h-[650px] md:overflow-hidden"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom,2rem)' }}
+      >
+        <div className="flex-1 space-y-4 sm:space-y-5">
           {/* Step 1: Search */}
           <div className={`transition-all duration-1000 ease-in-out ${demoStep >= 1 ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-4'}`}>
             <div className="flex items-center space-x-3 mb-3">
@@ -132,20 +134,23 @@ const SolutionSlide = () => {
           {/* Final Result */}
           <div className={`transition-all duration-1000 ease-in-out delay-900 ${demoStep === 4 ? 'opacity-100 transform translate-y-0 scale-100' : 'opacity-0 transform translate-y-8 scale-95'}`}>
             {demoStep === 4 && (
-              <div className="bg-[#2E003E] p-4 rounded-lg text-white shadow-lg">
-                <div className="flex items-center justify-between">
+              <div
+                className="bg-[#2E003E] p-3 sm:p-4 rounded-lg text-white shadow-lg"
+                style={{ marginBottom: 'env(safe-area-inset-bottom,2rem)' }}
+              >
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
                   <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <span className="font-plus-jakarta font-semibold text-sm">Proceed with Treatment</span>
+                    <div className="flex items-center space-x-2 mb-1 sm:mb-2">
+                      <span className="font-plus-jakarta font-semibold text-xs sm:text-sm">Proceed with Treatment</span>
                     </div>
                     <div className="space-y-1 text-xs opacity-90 font-plus-jakarta">
                       <div>Patient eligible</div>
                       <div>No PA required</div>
                     </div>
                   </div>
-                  <div className="text-right ml-4">
-                    <div className="text-xs opacity-75 mb-1 font-plus-jakarta">Response Time</div>
-                    <div className="font-plus-jakarta font-bold text-base">3.2s</div>
+                  <div className="text-right ml-0 sm:ml-4 w-full sm:w-auto">
+                    <div className="text-xs opacity-75 mb-0.5 font-plus-jakarta">Response Time</div>
+                    <div className="font-plus-jakarta font-bold text-base sm:text-lg">3.2s</div>
                   </div>
                 </div>
               </div>
