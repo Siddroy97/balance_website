@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Search, CheckCircle, AlertCircle, Clock, User, Shield, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -64,8 +63,8 @@ const PADecisionDemo = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen flex flex-col bg-gray-50 p-6" style={{ paddingBottom: 'env(safe-area-inset-bottom, 2rem)' }}>
+      <div className="max-w-4xl mx-auto w-full flex-1 flex flex-col">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
@@ -137,7 +136,7 @@ const PADecisionDemo = () => {
 
         {/* Patient Result Card */}
         {selectedPatient && !isChecking && (
-          <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-6 flex-1 overflow-auto" style={{ marginBottom: 'env(safe-area-inset-bottom, 2rem)' }}>
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-3">
                 <User size={24} className="text-[#2E003E]" />
