@@ -30,7 +30,7 @@ const Footer = () => {
         <div className="border-t border-gray-700 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="flex items-center space-x-6 text-gray-300 font-roboto text-sm">
-              <div>© 2024 ICON Designers LLC, Balance Health® All rights reserved.</div>
+              <div>© 2024 <a href="https://icon-design-showcase.lovable.app/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">ICON Designers LLC</a>, Balance Health® All rights reserved.</div>
               
               
             </div>
